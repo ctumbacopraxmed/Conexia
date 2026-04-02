@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AUTORIZACIONWEB {
+  ID                        Int                      @id @default(autoincrement())
+  ORDEN_SERVICIO            Int?                     @unique
+  FECHA_ORDEN               DateTime?                @db.Timestamp(6)
+  PRESTADOR_DOCUMENTO_ID    String?                  @db.VarChar(20)
+  NUMERO_POLIZA             Int?
+  NUMERO_FAMILIA            Int?
+  NUMERO_AFILIADO           Int?
+  BENEFICIARIO_DOCUMENTO_ID String?                  @db.VarChar(20)
+  FECHA_CREACION            DateTime?                @db.Timestamp(6)
+  USUARIO_CREACION_ID       String?                  @db.VarChar(20)
+  AUTORIZACIONWEBDETALLE    AUTORIZACIONWEBDETALLE[]
+
+  @@index([FECHA_CREACION], map: "idx_fecha_creacion")
+  @@index([FECHA_ORDEN], map: "idx_fecha_orden")
+  @@index([NUMERO_POLIZA], map: "idx_numero_poliza")
+  @@index([ORDEN_SERVICIO], map: "idx_orden_servicios")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model AUTORIZACIONWEBDETALLE {
+  ID                        Int              @id @default(autoincrement())
+  AUTORIZACIONWEB_ID        Int?
+  ORDEN_SERVICIO            Int?
+  CODIGO_SERVICIO           String?          @db.VarChar(100)
+  CANTIDAD_SERVICIO         Int?
+  CODIGO_DIAGNOSTICO        String?          @db.VarChar(255)
+  VALOR_ECUSANITAS          Float?
+  VALOR_CUBIERTO            Float?
+  VALOR_COPAGO_TOTAL        Float?
+  VALOR_DEDUCIBLE           Float?
+  PORCENTAJE_COBERTURA      Float?
+  COPAGO_MINIMO             Float?
+  VALOR_DESCUENTO           Float?
+  CODIGO_DIAGNOSTICO_ORIGEN String?          @db.VarChar(255)
+  AUTORIZACIONWEB           AUTORIZACIONWEB? @relation(fields: [AUTORIZACIONWEB_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([CODIGO_SERVICIO], map: "idx_codigo_servicio")
+  @@index([CODIGO_DIAGNOSTICO], map: "idx_diagnostico")
+  @@index([ORDEN_SERVICIO], map: "idx_orden_servicio")
+}
