@@ -13,10 +13,10 @@ import { responseData } from '../../common/filters/response.wrapper';
 export class AutorizacionesController {
     constructor(private autorizacionesService: AutorizacionesService) { }
 
-    @Get(':id')
-    @ApiOperation({ summary: 'Obtener autorización por ID' })
-    async getAutorizacion(@Param('id', ParseIntPipe) id: number) {
-        const result = await this.autorizacionesService.findOne(id);
+    @Get(':cedula')
+    @ApiOperation({ summary: 'Obtener autorización por Identificación' })
+    async getAutorizacion(@Param('cedula') cedula: string) {
+        const result = await this.autorizacionesService.findIdentify(cedula);
         return responseData(result);
     }
 

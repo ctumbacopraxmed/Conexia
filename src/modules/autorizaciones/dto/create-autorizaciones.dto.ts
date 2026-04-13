@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty,ApiHideProperty  } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDateString, IsNumber, IsString, IsOptional, ValidateNested, IsArray } from 'class-validator';
 
@@ -88,6 +88,18 @@ export class CreateAutorizacionDto {
     @IsOptional()
     @IsString()
     USUARIO_CREACION_ID?: string;
+
+    @ApiHideProperty()
+    TIPO: string;
+
+    @ApiHideProperty()
+    CLASE: string;
+
+    @ApiHideProperty()
+    TIPOATENCION: string;
+
+    @ApiHideProperty()
+    ESTADO: string;
 
     @ApiProperty({
         type: [CreateAutorizacionDetalleDto],

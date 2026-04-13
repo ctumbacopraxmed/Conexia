@@ -12,6 +12,15 @@ const autorizacionesSelect = Prisma.validator<Prisma.AUTORIZACIONWEBSelect>()({
 export class AutorizacionesRepository {
     constructor(private readonly prisma: PrismaService) { }
 
+    async findByIdentify(identify: string) {
+        return this.prisma.aUTORIZACIONWEB.findMany({
+            where: {
+                "BENEFICIARIO_DOCUMENTO_ID": identify,
+                "ESTADO": "APROBADA"
+            },
+            include: { AUTORIZACIONWEBDETALLE: true }
+        });
+    }
     async findById(id: number) {
         return this.prisma.aUTORIZACIONWEB.findUnique({
             where: { "ID": id },

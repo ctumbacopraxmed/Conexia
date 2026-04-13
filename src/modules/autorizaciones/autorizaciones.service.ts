@@ -6,9 +6,13 @@ import { CreateAutorizacionDto } from './dto/create-autorizaciones.dto';
 export class AutorizacionesService {
     constructor(private autorizacionesRepository: AutorizacionesRepository) { }
 
+    async findIdentify(identify: string) {
+        const data = await this.autorizacionesRepository.findByIdentify(identify);
+        return data;
+    }
     async findOne(id: number) {
-        const role = await this.getAutorizacionesOrThrow(id);
-        return role;
+        const data = await this.getAutorizacionesOrThrow(id);
+        return data;
     }
     async create(dto: CreateAutorizacionDto) {
         await this.validateAutorizacionDuplicada(dto.ORDEN_SERVICIO);
@@ -22,7 +26,10 @@ export class AutorizacionesService {
             BENEFICIARIO_DOCUMENTO_ID: dto.BENEFICIARIO_DOCUMENTO_ID,
             FECHA_CREACION: dto.FECHA_CREACION,
             USUARIO_CREACION_ID: dto.USUARIO_CREACION_ID,
-
+            TIPO:'AS',
+            CLASE: 'MANUAL',
+            TIPOATENCION: 'AMBULATORIA',
+            ESTADO: 'APROBADA',
             AUTORIZACIONWEBDETALLE: {
                 create: dto.AutorizacionDetalle.map(d => ({
                     ...d,

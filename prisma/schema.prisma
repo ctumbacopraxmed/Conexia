@@ -18,6 +18,13 @@ model AUTORIZACIONWEB {
   BENEFICIARIO_DOCUMENTO_ID String?                  @db.VarChar(20)
   FECHA_CREACION            DateTime?                @db.Timestamp(6)
   USUARIO_CREACION_ID       String?                  @db.VarChar(20)
+  TIPO                      String?                  @db.VarChar(2)
+  CLASE                     String?                  @db.VarChar(10)
+  FECHA_PAGO_CAJA           DateTime?                @db.Date
+  FACTURA_CAJA              String?                  @db.VarChar(17)
+  TIPOATENCION              String?                  @db.VarChar(15)
+  ORDEN_SUIT                Decimal?                 @db.Decimal(19, 0)
+  ESTADO                    String?                  @db.VarChar(20)
   AUTORIZACIONWEBDETALLE    AUTORIZACIONWEBDETALLE[]
 
   @@index([FECHA_CREACION], map: "idx_fecha_creacion")
@@ -42,6 +49,8 @@ model AUTORIZACIONWEBDETALLE {
   COPAGO_MINIMO             Float?
   VALOR_DESCUENTO           Float?
   CODIGO_DIAGNOSTICO_ORIGEN String?          @db.VarChar(255)
+  TIPO_HONORARIO            String?          @db.VarChar(5)
+  PRESTADOR_PRESTACION      String?          @db.VarChar(13)
   AUTORIZACIONWEB           AUTORIZACIONWEB? @relation(fields: [AUTORIZACIONWEB_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([CODIGO_SERVICIO], map: "idx_codigo_servicio")
