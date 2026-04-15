@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { AutorizacionesRepository } from './autorizaciones.repository';
 import { CreateAutorizacionDto } from './dto/create-autorizaciones.dto';
+import { UpdateAutorizacionDto } from './dto/update-autorizaciones.dto';
 
 @Injectable()
 export class AutorizacionesService {
@@ -26,7 +27,7 @@ export class AutorizacionesService {
             BENEFICIARIO_DOCUMENTO_ID: dto.BENEFICIARIO_DOCUMENTO_ID,
             FECHA_CREACION: dto.FECHA_CREACION,
             USUARIO_CREACION_ID: dto.USUARIO_CREACION_ID,
-            TIPO:'AS',
+            TIPO: 'AS',
             CLASE: 'MANUAL',
             TIPOATENCION: 'AMBULATORIA',
             ESTADO: 'APROBADA',
@@ -37,6 +38,24 @@ export class AutorizacionesService {
                 }))
             }
         });
+    }
+    async update(id: number, dto: UpdateAutorizacionDto) {
+        const validated = await this.getAutorizacionesOrThrow(id);
+        if(validated.ESTADO === 'PAGADA') {
+            throw new ConflictException('La autorización ya se encuentra pagada');
+        }
+        const updateData: any = {};
+        if (dto.FECHA_PAGO_CAJA !== undefined) {
+            updateData.FECHA_PAGO_CAJA = new Date(dto.FECHA_PAGO_CAJA);
+        }
+        if (dto.FACTURA_CAJA !== undefined) {
+            updateData.FACTURA_CAJA = dto.FACTURA_CAJA;
+        }
+        if (dto.ORDEN_SUIT !== undefined) {
+            updateData.ORDEN_SUIT = dto.ORDEN_SUIT;
+        }
+        updateData.ESTADO = dto.ESTADO ?? 'PAGADA';
+        return this.autorizacionesRepository.update(id, updateData);
     }
 
     private async getAutorizacionesOrThrow(id: number) {

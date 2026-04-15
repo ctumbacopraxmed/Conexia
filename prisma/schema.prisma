@@ -23,7 +23,7 @@ model AUTORIZACIONWEB {
   FECHA_PAGO_CAJA           DateTime?                @db.Date
   FACTURA_CAJA              String?                  @db.VarChar(17)
   TIPOATENCION              String?                  @db.VarChar(15)
-  ORDEN_SUIT                Decimal?                 @db.Decimal(19, 0)
+  ORDEN_SUIT                Decimal?                 @unique(map: "autorizacionweb_unique") @db.Decimal(19, 0)
   ESTADO                    String?                  @db.VarChar(20)
   AUTORIZACIONWEBDETALLE    AUTORIZACIONWEBDETALLE[]
 
@@ -41,13 +41,13 @@ model AUTORIZACIONWEBDETALLE {
   CODIGO_SERVICIO           String?          @db.VarChar(100)
   CANTIDAD_SERVICIO         Int?
   CODIGO_DIAGNOSTICO        String?          @db.VarChar(255)
-  VALOR_ECUSANITAS          Float?
-  VALOR_CUBIERTO            Float?
-  VALOR_COPAGO_TOTAL        Float?
-  VALOR_DEDUCIBLE           Float?
-  PORCENTAJE_COBERTURA      Float?
-  COPAGO_MINIMO             Float?
-  VALOR_DESCUENTO           Float?
+  VALOR_ECUSANITAS          Decimal?         @db.Decimal(10, 2)
+  VALOR_CUBIERTO            Decimal?         @db.Decimal(10, 2)
+  VALOR_COPAGO_TOTAL        Decimal?         @db.Decimal(10, 2)
+  VALOR_DEDUCIBLE           Decimal?         @db.Decimal(10, 2)
+  PORCENTAJE_COBERTURA      Decimal?         @db.Decimal(10, 2)
+  COPAGO_MINIMO             Decimal?         @db.Decimal(10, 2)
+  VALOR_DESCUENTO           Decimal?         @db.Decimal(10, 2)
   CODIGO_DIAGNOSTICO_ORIGEN String?          @db.VarChar(255)
   TIPO_HONORARIO            String?          @db.VarChar(5)
   PRESTADOR_PRESTACION      String?          @db.VarChar(13)

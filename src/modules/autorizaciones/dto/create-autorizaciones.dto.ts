@@ -1,6 +1,6 @@
 import { ApiProperty,ApiHideProperty  } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsDateString, IsNumber, IsString, IsOptional, ValidateNested, IsArray } from 'class-validator';
+import { Type, Transform } from 'class-transformer';
+import { IsDateString, IsNumber, IsString, IsOptional, ValidateNested, IsArray, Min } from 'class-validator';
 
 export class CreateAutorizacionDetalleDto {
 
@@ -8,8 +8,9 @@ export class CreateAutorizacionDetalleDto {
     @IsString()
     CODIGO_SERVICIO: string;
 
-    @ApiProperty({ required: true })
+    @ApiProperty({ required: true, minimum: 1 })
     @IsNumber()
+    @Min(1)
     CANTIDAD_SERVICIO: number;
 
     @ApiProperty({ required: true })
@@ -17,30 +18,37 @@ export class CreateAutorizacionDetalleDto {
     CODIGO_DIAGNOSTICO: string;
 
     @ApiProperty({ required: true })
+    @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
     VALOR_ECUSANITAS: number;
 
     @ApiProperty({ required: true })
+    @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
     VALOR_CUBIERTO: number;
 
     @ApiProperty({ required: true })
+    @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
     VALOR_COPAGO_TOTAL: number;
 
     @ApiProperty({ required: true })
+    @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
     VALOR_DEDUCIBLE: number;
 
     @ApiProperty({ required: true })
+    @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
     PORCENTAJE_COBERTURA: number;
 
     @ApiProperty({ required: true })
+    @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
     COPAGO_MINIMO: number;
 
     @ApiProperty({ required: true })
+    @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
     VALOR_DESCUENTO: number;
 
