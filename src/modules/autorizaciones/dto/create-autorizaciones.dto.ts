@@ -6,108 +6,108 @@ export class CreateAutorizacionDetalleDto {
 
     @ApiProperty({ required: true })
     @IsString()
-    CODIGO_SERVICIO: string;
+    codigo_servicio: string;
 
     @ApiProperty({ required: true, minimum: 1 })
     @IsNumber()
     @Min(1)
-    CANTIDAD_SERVICIO: number;
+    cantidad_servicio: number;
 
     @ApiProperty({ required: true })
     @IsString()
-    CODIGO_DIAGNOSTICO: string;
+    codigo_diagnostico: string;
 
     @ApiProperty({ required: true })
     @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
-    VALOR_ECUSANITAS: number;
+    valor_ecusanitas: number;
 
     @ApiProperty({ required: true })
     @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
-    VALOR_CUBIERTO: number;
+    valor_cubierto: number;
 
     @ApiProperty({ required: true })
     @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
-    VALOR_COPAGO_TOTAL: number;
+    valor_copago_total: number;
 
     @ApiProperty({ required: true })
     @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
-    VALOR_DEDUCIBLE: number;
+    valor_deducible: number;
 
     @ApiProperty({ required: true })
     @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
-    PORCENTAJE_COBERTURA: number;
+    porcentaje_cobertura: number;
 
     @ApiProperty({ required: true })
     @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
-    COPAGO_MINIMO: number;
+    copago_minimo: number;
 
     @ApiProperty({ required: true })
     @Transform(({ value }) => Number(parseFloat(value).toFixed(2)))
     @IsNumber()
-    VALOR_DESCUENTO: number;
+    valor_descuento: number;
 
     @ApiProperty({ required: true })
     @IsString()
-    CODIGO_DIAGNOSTICO_ORIGEN: string;
+    codigo_diagnostico_origen: string;
 }
 
 
 export class CreateAutorizacionDto {
     @ApiProperty({ required: true })
     @IsNumber()
-    ORDEN_SERVICIO: number;
+    orden_servicio: number;
 
     @ApiProperty({ required: true, type: String, example: 'YYYY-MM-DDT00:00:00.000Z' })
     @IsDateString()
-    FECHA_ORDEN: string;
+    fecha_orden: string;
 
     @ApiProperty({ required: true })
     @IsString()
-    PRESTADOR_DOCUMENTO_ID: string;
+    prestador_documento_id: string;
 
     @ApiProperty({ required: true })
     @IsNumber()
-    NUMERO_POLIZA: number;
+    numero_poliza: number;
 
     @ApiProperty({ required: true })
     @IsNumber()
-    NUMERO_FAMILIA: number;
+    numero_familia: number;
 
     @ApiProperty({ required: true })
     @IsNumber()
-    NUMERO_AFILIADO: number;
+    numero_afiliado: number;
 
     @ApiProperty({ required: false })
     @IsOptional()
     @IsString()
-    BENEFICIARIO_DOCUMENTO_ID?: string;
+    beneficiario_documento_id?: string;
 
     @ApiProperty({ required: true, type: String, example: 'YYYY-MM-DDT00:00:00.000Z' })
     @IsDateString()
-    FECHA_CREACION: string;
+    fecha_creacion: string;
 
     @ApiProperty({ required: false })
     @IsOptional()
     @IsString()
-    USUARIO_CREACION_ID?: string;
+    usuario_creacion_id?: string;
 
     @ApiHideProperty()
-    TIPO: string;
+    tipo: string;
 
     @ApiHideProperty()
-    CLASE: string;
+    clase: string;
 
     @ApiHideProperty()
-    TIPOATENCION: string;
+    tipoatencion: string;
 
     @ApiHideProperty()
-    ESTADO: string;
+    estado: string;
 
     @ApiProperty({
         type: [CreateAutorizacionDetalleDto],

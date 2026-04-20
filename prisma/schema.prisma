@@ -7,53 +7,133 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model AUTORIZACIONWEB {
-  ID                        Int                      @id @default(autoincrement())
-  ORDEN_SERVICIO            Int?                     @unique
-  FECHA_ORDEN               DateTime?                @db.Timestamp(6)
-  PRESTADOR_DOCUMENTO_ID    String?                  @db.VarChar(20)
-  NUMERO_POLIZA             Int?
-  NUMERO_FAMILIA            Int?
-  NUMERO_AFILIADO           Int?
-  BENEFICIARIO_DOCUMENTO_ID String?                  @db.VarChar(20)
-  FECHA_CREACION            DateTime?                @db.Timestamp(6)
-  USUARIO_CREACION_ID       String?                  @db.VarChar(20)
-  TIPO                      String?                  @db.VarChar(2)
-  CLASE                     String?                  @db.VarChar(10)
-  FECHA_PAGO_CAJA           DateTime?                @db.Date
-  FACTURA_CAJA              String?                  @db.VarChar(17)
-  TIPOATENCION              String?                  @db.VarChar(15)
-  ORDEN_SUIT                Decimal?                 @unique(map: "autorizacionweb_unique") @db.Decimal(19, 0)
-  ESTADO                    String?                  @db.VarChar(20)
-  AUTORIZACIONWEBDETALLE    AUTORIZACIONWEBDETALLE[]
-
-  @@index([FECHA_CREACION], map: "idx_fecha_creacion")
-  @@index([FECHA_ORDEN], map: "idx_fecha_orden")
-  @@index([NUMERO_POLIZA], map: "idx_numero_poliza")
-  @@index([ORDEN_SERVICIO], map: "idx_orden_servicios")
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String?
+  roleId    Int
+  isActive  Boolean   @default(true)
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  tokens    Token[]
+  role      Role      @relation(fields: [roleId], references: [id])
 }
 
-/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
-model AUTORIZACIONWEBDETALLE {
-  ID                        Int              @id @default(autoincrement())
-  AUTORIZACIONWEB_ID        Int?
-  ORDEN_SERVICIO            Int?
-  CODIGO_SERVICIO           String?          @db.VarChar(100)
-  CANTIDAD_SERVICIO         Int?
-  CODIGO_DIAGNOSTICO        String?          @db.VarChar(255)
-  VALOR_ECUSANITAS          Decimal?         @db.Decimal(10, 2)
-  VALOR_CUBIERTO            Decimal?         @db.Decimal(10, 2)
-  VALOR_COPAGO_TOTAL        Decimal?         @db.Decimal(10, 2)
-  VALOR_DEDUCIBLE           Decimal?         @db.Decimal(10, 2)
-  PORCENTAJE_COBERTURA      Decimal?         @db.Decimal(10, 2)
-  COPAGO_MINIMO             Decimal?         @db.Decimal(10, 2)
-  VALOR_DESCUENTO           Decimal?         @db.Decimal(10, 2)
-  CODIGO_DIAGNOSTICO_ORIGEN String?          @db.VarChar(255)
-  TIPO_HONORARIO            String?          @db.VarChar(5)
-  PRESTADOR_PRESTACION      String?          @db.VarChar(13)
-  AUTORIZACIONWEB           AUTORIZACIONWEB? @relation(fields: [AUTORIZACIONWEB_ID], references: [ID], onDelete: NoAction, onUpdate: NoAction)
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  isActive    Boolean      @default(true)
+  deletedAt   DateTime?
+  users       User[]
+  permissions Permission[] @relation("RolePermissions")
+}
 
-  @@index([CODIGO_SERVICIO], map: "idx_codigo_servicio")
-  @@index([CODIGO_DIAGNOSTICO], map: "idx_diagnostico")
-  @@index([ORDEN_SERVICIO], map: "idx_orden_servicio")
+model Permission {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  roles       Role[]  @relation("RolePermissions")
+}
+
+model Token {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model autorizacionweb {
+  id                          Int                      @id @default(autoincrement())
+  orden_servicio              Int?                     @unique
+  fecha_orden                 DateTime?                @db.Timestamp(6)
+  prestador_documento_id      String?                  @db.VarChar(20)
+  numero_poliza               Int?
+  numero_familia              Int?
+  numero_afiliado             Int?
+  beneficiario_documento_id   String?                  @db.VarChar(20)
+  fecha_creacion              DateTime?                @db.Timestamp(6)
+  usuario_creacion_id         String?                  @db.VarChar(20)
+  tipo                        String?                  @db.VarChar(2)
+  clase                       String?                  @db.VarChar(11)
+  fecha_pago_caja             DateTime?                @db.Date
+  factura_caja                String?                  @db.VarChar(17)
+  tipoatencion                String?                  @db.VarChar(15)
+  orden_suit                  Int?                     @unique(map: "autorizacionweb_unique")
+  estado                      Estado?
+  bloqueopagoapp              Int?
+  codigo_plan                 BigInt?
+  tipo_documento_beneficiario String?                  @db.VarChar(9)
+  autorizacionwebdetalle      autorizacionwebdetalle[]
+
+  @@index([fecha_creacion], map: "idx_fecha_creacion")
+  @@index([fecha_orden], map: "idx_fecha_orden")
+  @@index([numero_poliza], map: "idx_numero_poliza")
+  @@index([orden_servicio], map: "idx_orden_servicios")
+}
+
+model autorizacionwebdetalle {
+  id                        Int              @id @default(autoincrement())
+  autorizacionweb_id        Int?
+  orden_servicio            Int?
+  codigo_servicio           String?          @db.VarChar(100)
+  cantidad_servicio         Int?
+  codigo_diagnostico        String?          @db.VarChar(255)
+  valor_ecusanitas          Decimal?         @db.Decimal(10, 2)
+  valor_cubierto            Decimal?         @db.Decimal(10, 2)
+  valor_copago_total        Decimal?         @db.Decimal(10, 2)
+  valor_deducible           Decimal?         @db.Decimal(10, 2)
+  porcentaje_cobertura      Decimal?         @db.Decimal(10, 2)
+  copago_minimo             Decimal?         @db.Decimal(10, 2)
+  valor_descuento           Decimal?         @db.Decimal(10, 2)
+  codigo_diagnostico_origen String?          @db.VarChar(255)
+  tipo_honorario            String?          @db.VarChar(5)
+  prestador_prestacion      String?          @db.VarChar(13)
+  codigo_financiador        String?          @db.VarChar(20)
+  tipo_tecnologia           String?          @db.VarChar(3)
+  autorizacionweb           autorizacionweb? @relation(fields: [autorizacionweb_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([codigo_servicio], map: "idx_codigo_servicio")
+  @@index([codigo_diagnostico], map: "idx_diagnostico")
+  @@index([orden_servicio], map: "idx_orden_servicio")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model plan_prueba {
+  plan                    String?
+  procedure               String?
+  daily_limit             BigInt?
+  has_limit               Boolean?
+  monthly_limit           BigInt?
+  weekly_limit            BigInt?
+  daily_amount_limit      Float?
+  weekly_amount_limit     Float?
+  yearly_limit            BigInt?
+  yearly_amount_limit     Float?
+  monthly_amount_limit    Float?
+  has_co_pay              Boolean?
+  has_refund              Boolean?
+  has_co_insurance        Boolean?
+  co_pay_amount           Float?
+  over_limit_action_id    BigInt?
+  network_level_id        BigInt?
+  co_insurance_percentage BigInt?
+  is_applicable           Boolean?
+  promotion_end_date      String?
+  promotion_start_date    String?
+  exempt_deductible       Boolean?
+  technology_code         String?
+  patient_care_type_id    BigInt?
+  practice_type_id        BigInt?
+
+  @@ignore
+}
+
+enum Estado {
+  APROBADO
+  PAGADO
 }

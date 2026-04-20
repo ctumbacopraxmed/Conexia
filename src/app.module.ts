@@ -4,6 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AutorizacionesModule } from './modules/autorizaciones/autorizaciones.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [
@@ -11,7 +14,10 @@ import { PrismaModule } from './prisma/prisma.module';
       isGlobal: true,
     }),
     AutorizacionesModule,
-    PrismaModule
+    PrismaModule,
+    AuthModule,
+    UsersModule,
+    RolesModule
   ],
   controllers: [AppController],
   providers: [AppService],

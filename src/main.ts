@@ -13,15 +13,16 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   const config = new DocumentBuilder()
     .setTitle('Mi API')
-    .setDescription('API Data Conexia')
-    .setVersion('v1.0')
+    .setDescription('API Data Conexia 2026-04-20')
+    .setVersion('v1.4')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
       tagsSorter: (a, b) => {
-        const order = ['Autorizaciones'];
+        const order = ['Autorizaciones', 'Auth', 'Roles', 'Users'];
         return order.indexOf(a) - order.indexOf(b);
       },
     },

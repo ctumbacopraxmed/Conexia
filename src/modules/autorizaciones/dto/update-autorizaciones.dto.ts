@@ -5,17 +5,20 @@ import { IsDateString, IsNumber, IsString, MaxLength  } from 'class-validator';
 export class UpdateAutorizacionDto {
     @ApiProperty({ required: true, example: 'YYYY-MM-DD' })
     @IsDateString()
-    FECHA_PAGO_CAJA: Date;
+    fecha_pago_caja: Date;
 
     @ApiProperty({ required: true, example: '000-000-000000000' })
     @IsString()
     @MaxLength(17)
-    FACTURA_CAJA: string;
+    factura_caja: string;
 
     @ApiProperty({ required: true })
     @IsNumber()
-    ORDEN_SUIT: number;
+    orden_suit: number;
 
     @ApiHideProperty()
-    ESTADO: string;
+    estado: string;
+
+    @ApiHideProperty()
+    bloqueopagoapp: number;
 }

@@ -2,40 +2,43 @@ import { Expose, Type, Transform } from 'class-transformer';
 import { format } from 'date-fns';
 
 export class AutorizacionDetalleDto {
-    @Expose({ name: 'ORDEN_SERVICIO' })
+    @Expose({ name: 'orden_servicio' })
     numOrden: number;
-
-    @Expose({ name: 'CODIGO_SERVICIO' })
+    @Expose({ name: 'codigo_servicio' })
     codigoServicio: string;
     @Expose()
     @Transform(() => null)
     nombreServicio: string;
-    @Expose({ name: 'VALOR_CUBIERTO' })
+    @Expose({ name: 'cantidad_servicio' })
+    cantidad: number;
+    @Expose({ name: 'valor_cubierto' })
     @Transform(({ value }) => value ? Number(value) : 0)
     valorCubierto: number;
-    @Expose({ name: 'VALOR_COPAGO_TOTAL' })
+    @Expose({ name: 'valor_copago_total' })
     @Transform(({ value }) => value ? Number(value) : 0)
     valorCopago: number;
 }
 
 export class AutorizacionResponseDto {
-    @Expose({ name: 'NUMERO_POLIZA' })
+    @Expose({ name: 'id' })
+    autorizacionId: number;
+    @Expose({ name: 'numero_poliza' })
     contrato: string;
-    @Expose({ name: 'NUMERO_FAMILIA' })
+    @Expose({ name: 'numero_familia' })
     familia: string;
     @Expose()
     @Transform(() => null)
     titularFamilia: string;
-    @Expose({ name: 'NUMERO_AFILIADO' })
+    @Expose({ name: 'numero_afiliado' })
     afiliado: string;
-    @Expose({ name: 'BENEFICIARIO_DOCUMENTO_ID' })
+    @Expose({ name: 'beneficiario_documento_id' })
     identificacionAfiliado: string;
     @Expose()
     @Transform(() => null)
     nombreAfiliado: string;
-    @Expose({ name: 'ORDEN_SERVICIO' })
+    @Expose({ name: 'orden_servicio' })
     ordenServicio: string;
-    @Expose({ name: 'FECHA_ORDEN' })
+    @Expose({ name: 'fecha_orden' })
     @Transform(({ value }) =>
         value ? format(new Date(value), 'dd/MM/yyyy') : null
     )
@@ -43,13 +46,17 @@ export class AutorizacionResponseDto {
     @Expose()
     @Transform(() => null)
     nombreCM: string;
+    @Expose({ name: 'estado' })
+    estado: string;
+    @Expose({ name: 'clase' })
+    clase: string;
     @Expose()
     @Transform(({ obj }) => {
-        const detalles = obj.AUTORIZACIONWEBDETALLE;
+        const detalles = obj.autorizacionwebdetalle;
         if (!detalles || !Array.isArray(detalles)) return 0;
 
         const total = detalles.reduce(
-            (total, item) => total + Number(item.VALOR_CUBIERTO || 0),
+            (total, item) => total + Number(item.valor_cubierto * item.cantidad_servicio || 0),
             0
         );
 
@@ -58,17 +65,17 @@ export class AutorizacionResponseDto {
     valorCubierto: number;
     @Expose()
     @Transform(({ obj }) => {
-        const detalles = obj.AUTORIZACIONWEBDETALLE;
+        const detalles = obj.autorizacionwebdetalle;
         if (!detalles || !Array.isArray(detalles)) return 0;
         const total = detalles.reduce(
-            (total, item) => total + Number(item.VALOR_COPAGO_TOTAL || 0),
+            (total, item) => total + Number(item.valor_copago_total * item.cantidad_servicio || 0),
             0
         );
         return Number(total.toFixed(2));
     })
     valorCopago: number;
 
-    @Expose({ name: 'AUTORIZACIONWEBDETALLE' })
+    @Expose({ name: 'autorizacionwebdetalle' })
     @Type(() => AutorizacionDetalleDto)
     listaCopago: AutorizacionDetalleDto[];
 }
