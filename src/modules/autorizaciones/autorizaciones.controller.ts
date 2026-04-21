@@ -11,8 +11,8 @@ import { PermissionsGuard } from '../auth/permissions.guard';
 import { Permissions } from '../../common/decorators/permisos-auth.derorator';
 
 @ApiTags('Autorizaciones')
-/*@ApiBearerAuth()
-@UseGuards(JwtAuthGuard, PermissionsGuard)*/
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('autorizaciones')
 export class AutorizacionesController {
     constructor(private autorizacionesService: AutorizacionesService) { }

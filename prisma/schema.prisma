@@ -48,27 +48,32 @@ model Token {
 }
 
 model autorizacionweb {
-  id                          Int                      @id @default(autoincrement())
-  orden_servicio              Int?                     @unique
-  fecha_orden                 DateTime?                @db.Timestamp(6)
-  prestador_documento_id      String?                  @db.VarChar(20)
-  numero_poliza               Int?
-  numero_familia              Int?
-  numero_afiliado             Int?
-  beneficiario_documento_id   String?                  @db.VarChar(20)
-  fecha_creacion              DateTime?                @db.Timestamp(6)
-  usuario_creacion_id         String?                  @db.VarChar(20)
-  tipo                        String?                  @db.VarChar(2)
-  clase                       String?                  @db.VarChar(11)
-  fecha_pago_caja             DateTime?                @db.Date
-  factura_caja                String?                  @db.VarChar(17)
-  tipoatencion                String?                  @db.VarChar(15)
-  orden_suit                  Int?                     @unique(map: "autorizacionweb_unique")
-  estado                      Estado?
-  bloqueopagoapp              Int?
-  codigo_plan                 BigInt?
-  tipo_documento_beneficiario String?                  @db.VarChar(9)
-  autorizacionwebdetalle      autorizacionwebdetalle[]
+  id                             Int                      @id @default(autoincrement())
+  orden_servicio                 Int?                     @unique
+  fecha_orden                    DateTime?                @db.Timestamp(6)
+  prestador_documento_id         String?                  @db.VarChar(20)
+  numero_poliza                  Int?
+  numero_familia                 Int?
+  numero_afiliado                Int?
+  beneficiario_documento_id      String?                  @db.VarChar(20)
+  fecha_creacion                 DateTime?                @db.Timestamp(6)
+  usuario_creacion_id            String?                  @db.VarChar(20)
+  tipo                           String?                  @db.VarChar(2)
+  clase                          String?                  @db.VarChar(11)
+  fecha_pago_caja                DateTime?                @db.Date
+  factura_caja                   String?                  @db.VarChar(17)
+  tipoatencion                   String?                  @db.VarChar(15)
+  orden_suit                     Int?                     @unique(map: "autorizacionweb_unique")
+  estado                         Estado?
+  bloqueopagoapp                 Int?
+  codigo_plan                    BigInt?
+  titular_familia_documento_id   String?                  @db.VarChar(20)
+  titular_familia_documento_tipo String?                  @db.VarChar(9)
+  titular_familia_nombre         String?                  @db.VarChar(255)
+  beneficiario_documento_tipo    String?                  @db.VarChar(9)
+  beneficiario_nombre            String?                  @db.VarChar(255)
+  centro_medico_nombre           String?                  @db.VarChar(255)
+  autorizacionwebdetalle         autorizacionwebdetalle[]
 
   @@index([fecha_creacion], map: "idx_fecha_creacion")
   @@index([fecha_orden], map: "idx_fecha_orden")
@@ -95,6 +100,7 @@ model autorizacionwebdetalle {
   prestador_prestacion      String?          @db.VarChar(13)
   codigo_financiador        String?          @db.VarChar(20)
   tipo_tecnologia           String?          @db.VarChar(3)
+  servicio_nombre           String?          @db.VarChar(800)
   autorizacionweb           autorizacionweb? @relation(fields: [autorizacionweb_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([codigo_servicio], map: "idx_codigo_servicio")

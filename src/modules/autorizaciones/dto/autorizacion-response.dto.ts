@@ -6,8 +6,7 @@ export class AutorizacionDetalleDto {
     numOrden: number;
     @Expose({ name: 'codigo_servicio' })
     codigoServicio: string;
-    @Expose()
-    @Transform(() => null)
+    @Expose({ name: 'servicio_nombre' })
     nombreServicio: string;
     @Expose({ name: 'cantidad_servicio' })
     cantidad: number;
@@ -26,15 +25,19 @@ export class AutorizacionResponseDto {
     contrato: string;
     @Expose({ name: 'numero_familia' })
     familia: string;
-    @Expose()
-    @Transform(() => null)
+    @Expose({ name: 'titular_familia_documento_id' })
     titularFamilia: string;
+    @Expose({ name: 'titular_familia_documento_tipo' })
+    tipoDocumentoTitular: string;
+    @Expose({ name: 'titular_familia_nombre' })
+    nombreTitular: string;
     @Expose({ name: 'numero_afiliado' })
     afiliado: string;
     @Expose({ name: 'beneficiario_documento_id' })
     identificacionAfiliado: string;
-    @Expose()
-    @Transform(() => null)
+    @Expose({ name: 'beneficiario_documento_tipo' })
+    tipoDocumentoAfiliado: string;
+    @Expose({ name: 'beneficiario_nombre' })
     nombreAfiliado: string;
     @Expose({ name: 'orden_servicio' })
     ordenServicio: string;
@@ -43,8 +46,7 @@ export class AutorizacionResponseDto {
         value ? format(new Date(value), 'dd/MM/yyyy') : null
     )
     fechaOrden: string;
-    @Expose()
-    @Transform(() => null)
+    @Expose({ name: 'centro_medico_nombre' })
     nombreCM: string;
     @Expose({ name: 'estado' })
     estado: string;

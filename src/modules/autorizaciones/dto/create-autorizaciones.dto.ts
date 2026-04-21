@@ -8,6 +8,10 @@ export class CreateAutorizacionDetalleDto {
     @IsString()
     codigo_servicio: string;
 
+    @ApiProperty({ required: true })
+    @IsString()
+    servicio_nombre: string;
+
     @ApiProperty({ required: true, minimum: 1 })
     @IsNumber()
     @Min(1)
@@ -72,6 +76,18 @@ export class CreateAutorizacionDto {
     prestador_documento_id: string;
 
     @ApiProperty({ required: true })
+    @IsString()
+    titular_familia_documento_id: string;
+
+    @ApiProperty({ required: true })
+    @IsString()
+    titular_familia_documento_tipo: string;
+
+    @ApiProperty({ required: true })
+    @IsString()
+    titular_familia_nombre: string;
+
+    @ApiProperty({ required: true })
     @IsNumber()
     numero_poliza: number;
 
@@ -83,14 +99,25 @@ export class CreateAutorizacionDto {
     @IsNumber()
     numero_afiliado: number;
 
-    @ApiProperty({ required: false })
-    @IsOptional()
+    @ApiProperty({ required: true })
     @IsString()
-    beneficiario_documento_id?: string;
+    beneficiario_documento_id: string;
+
+    @ApiProperty({ required: true })
+    @IsString()
+    beneficiario_documento_tipo: string;
+
+    @ApiProperty({ required: true })
+    @IsString()
+    beneficiario_nombre: string;
 
     @ApiProperty({ required: true, type: String, example: 'YYYY-MM-DDT00:00:00.000Z' })
     @IsDateString()
     fecha_creacion: string;
+
+    @ApiProperty({ required: true })
+    @IsString()
+    centro_medico_nombre: string;
 
     @ApiProperty({ required: false })
     @IsOptional()
