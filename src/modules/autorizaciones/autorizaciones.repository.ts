@@ -3,7 +3,10 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { Prisma, autorizacionweb, autorizacionwebdetalle } from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 import { AutorizacionResponseDto } from './dto/autorizacion-response.dto';
-
+export enum Estado {
+    APROBADO = 'APROBADO',
+    PAGADO = 'PAGADO',
+}
 const autorizacionesSelect = Prisma.validator<Prisma.autorizacionwebSelect>()({
     id: true,
     orden_servicio: true,
@@ -14,16 +17,22 @@ const autorizacionesSelect = Prisma.validator<Prisma.autorizacionwebSelect>()({
 export class AutorizacionesRepository {
     constructor(private readonly prisma: PrismaService) { }
 
-    async findByIdentify(identify: string): Promise<AutorizacionResponseDto[]> {
+    async findByIdentify(identify: string, status: Estado): Promise<AutorizacionResponseDto[]> {
+        const where: any = {
+            beneficiario_documento_id: identify,
+        };
+        if (status === Estado.APROBADO) {
+            where.estado = 'APROBADO';
+            where.fecha_pago_caja = null;
+            where.factura_caja = null;
+            where.bloqueopagoapp = null;
+        }
+        if (status === Estado.PAGADO) {
+            where.estado = 'PAGADO';
+        }
         const data = await this.prisma.autorizacionweb.findMany({
-            where: {
-                "beneficiario_documento_id": identify,
-                "estado": "APROBADO",
-                "fecha_pago_caja": null,
-                "factura_caja": null,
-                "bloqueopagoapp": null
-            },
-            include: { autorizacionwebdetalle: true }
+            where,
+            include: { autorizacionwebdetalle: true },
         });
         const mapped = data.map(item => ({
             ...item,

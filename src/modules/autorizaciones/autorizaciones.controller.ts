@@ -4,12 +4,15 @@ import { CreateAutorizacionDto } from './dto/create-autorizaciones.dto';
 import { UpdateAutorizacionDto } from './dto/update-autorizaciones.dto';
 import { UpdateStatusAutorizacionDto } from './dto/updatestatus-autorizaciones.dto';
 import { FilterAutorizacionDto } from './dto/filter-autorizaciones.dto';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import { responseData, responseNovo } from '../../common/filters/response.wrapper';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
 import { Permissions } from '../../common/decorators/permisos-auth.derorator';
-
+export enum Estado {
+    APROBADO = 'APROBADO',
+    PAGADO = 'PAGADO',
+}
 @ApiTags('Autorizaciones')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, PermissionsGuard)
@@ -17,15 +20,23 @@ import { Permissions } from '../../common/decorators/permisos-auth.derorator';
 export class AutorizacionesController {
     constructor(private autorizacionesService: AutorizacionesService) { }
     @Permissions('VER_REGISTROS')
-    @Get(':cedula')
+    @Get(':cedula/:estado')
     @ApiOperation({
         summary: 'Obtener autorización por Identificación',
         description: 'Obtiene las autorizaciones APROBADAS, que aun no han sido gestionadas por Conexia.'
     })
-    async getAutorizacion(@Param('cedula') cedula: string) {
-        const result = await this.autorizacionesService.findIdentify(cedula);
+    @ApiParam({
+        name: 'estado',
+        enum: Estado,
+        required: true,
+    })
+    async getAutorizacion(
+        @Param('cedula') cedula: string,
+        @Param('estado') estado: Estado,
+    ) {
+        const result = await this.autorizacionesService.findIdentify(cedula, estado);
         if (result.length === 0) {
-            return responseNovo(false, null, 'ORDEN DE SERVICIO WEB', 404, 'AUTORIZACIÓN NO ENCONTRADA');
+            return responseNovo(false, null, 'ORDEN DE SERVICIO WEB', 200, 'AUTORIZACIÓN NO ENCONTRADA');
         }
         return responseNovo(true, result, 'ORDEN DE SERVICIO WEB', 200, 'CORRECTO');
     }

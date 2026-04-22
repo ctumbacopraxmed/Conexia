@@ -16,6 +16,12 @@ export class AutorizacionDetalleDto {
     @Expose({ name: 'valor_copago_total' })
     @Transform(({ value }) => value ? Number(value) : 0)
     valorCopago: number;
+    @Expose({ name: 'valor_deducible' })
+    @Transform(({ value }) => value ? Number(value) : 0)
+    valorDeducible: number;
+    @Expose({ name: 'valor_copago_terceros' })
+    @Transform(({ value }) => value ? Number(value) : 0)
+    valorTerceros: number;
 }
 
 export class AutorizacionResponseDto {
@@ -52,6 +58,10 @@ export class AutorizacionResponseDto {
     estado: string;
     @Expose({ name: 'clase' })
     clase: string;
+    @Expose({ name: 'fecha_pago_caja' })
+    fechaFactura: string;
+    @Expose({ name: 'factura_caja' })
+    numFactura: string;
     @Expose()
     @Transform(({ obj }) => {
         const detalles = obj.autorizacionwebdetalle;
@@ -69,10 +79,14 @@ export class AutorizacionResponseDto {
     @Transform(({ obj }) => {
         const detalles = obj.autorizacionwebdetalle;
         if (!detalles || !Array.isArray(detalles)) return 0;
-        const total = detalles.reduce(
-            (total, item) => total + Number(item.valor_copago_total * item.cantidad_servicio || 0),
-            0
-        );
+        const total = detalles.reduce((acc, item) => {
+            const copago = Number(item.valor_copago_total * item.cantidad_servicio || 0);
+            const deducible = Number(item.valor_deducible || 0);
+            const terceros = Number(item.valor_copago_terceros * item.cantidad_servicio || 0);
+            return acc + copago + deducible + terceros;
+        }, 0);
+
+
         return Number(total.toFixed(2));
     })
     valorCopago: number;

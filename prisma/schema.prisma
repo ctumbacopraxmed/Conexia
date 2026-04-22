@@ -101,6 +101,7 @@ model autorizacionwebdetalle {
   codigo_financiador        String?          @db.VarChar(20)
   tipo_tecnologia           String?          @db.VarChar(3)
   servicio_nombre           String?          @db.VarChar(800)
+  valor_copago_terceros     Decimal          @default(0) @db.Decimal(10, 2)
   autorizacionweb           autorizacionweb? @relation(fields: [autorizacionweb_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([codigo_servicio], map: "idx_codigo_servicio")
@@ -110,8 +111,8 @@ model autorizacionwebdetalle {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model plan_prueba {
-  plan                    String?
-  procedure               String?
+  plan                    String?  @db.VarChar(255)
+  procedure               String?  @db.VarChar(255)
   daily_limit             BigInt?
   has_limit               Boolean?
   monthly_limit           BigInt?
@@ -129,12 +130,13 @@ model plan_prueba {
   network_level_id        BigInt?
   co_insurance_percentage BigInt?
   is_applicable           Boolean?
-  promotion_end_date      String?
-  promotion_start_date    String?
+  promotion_end_date      String?  @db.VarChar(255)
+  promotion_start_date    String?  @db.VarChar(255)
   exempt_deductible       Boolean?
-  technology_code         String?
+  technology_code         String?  @db.VarChar(255)
   patient_care_type_id    BigInt?
   practice_type_id        BigInt?
+  id                      BigInt   @default(autoincrement())
 
   @@ignore
 }

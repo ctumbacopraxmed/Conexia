@@ -4,13 +4,16 @@ import { CreateAutorizacionDto } from './dto/create-autorizaciones.dto';
 import { UpdateAutorizacionDto } from './dto/update-autorizaciones.dto';
 import { UpdateStatusAutorizacionDto } from './dto/updatestatus-autorizaciones.dto';
 import { FilterAutorizacionDto } from './dto/filter-autorizaciones.dto';
-
+export enum Estado {
+    APROBADO = 'APROBADO',
+    PAGADO = 'PAGADO',
+}
 @Injectable()
 export class AutorizacionesService {
     constructor(private autorizacionesRepository: AutorizacionesRepository) { }
 
-    async findIdentify(identify: string) {
-        const data = await this.autorizacionesRepository.findByIdentify(identify);
+    async findIdentify(identify: string, status: Estado) {
+        const data = await this.autorizacionesRepository.findByIdentify(identify, status);
         return data;
     }
     async findAll(params: FilterAutorizacionDto) {
