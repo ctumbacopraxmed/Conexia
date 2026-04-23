@@ -77,6 +77,10 @@ export class CreateAutorizacionDto {
 
     @ApiProperty({ required: true })
     @IsString()
+    prestador_nombre: string;
+
+    @ApiProperty({ required: true })
+    @IsString()
     titular_familia_documento_id: string;
 
     @ApiProperty({ required: true })

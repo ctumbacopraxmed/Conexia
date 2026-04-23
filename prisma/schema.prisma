@@ -73,6 +73,7 @@ model autorizacionweb {
   beneficiario_documento_tipo    String?                  @db.VarChar(9)
   beneficiario_nombre            String?                  @db.VarChar(255)
   centro_medico_nombre           String?                  @db.VarChar(255)
+  prestador_nombre               String?                  @db.VarChar(255)
   autorizacionwebdetalle         autorizacionwebdetalle[]
 
   @@index([fecha_creacion], map: "idx_fecha_creacion")
@@ -96,7 +97,7 @@ model autorizacionwebdetalle {
   copago_minimo             Decimal?         @db.Decimal(10, 2)
   valor_descuento           Decimal?         @db.Decimal(10, 2)
   codigo_diagnostico_origen String?          @db.VarChar(255)
-  tipo_honorario            String?          @db.VarChar(5)
+  tipo_honorario            String           @default("NA") @db.VarChar(5)
   prestador_prestacion      String?          @db.VarChar(13)
   codigo_financiador        String?          @db.VarChar(20)
   tipo_tecnologia           String?          @db.VarChar(3)

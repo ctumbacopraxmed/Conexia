@@ -30,6 +30,7 @@ export class AutorizacionesService {
             orden_servicio: dto.orden_servicio,
             fecha_orden: dto.fecha_orden,
             prestador_documento_id: dto.prestador_documento_id,
+            prestador_nombre: dto.prestador_nombre,
             titular_familia_documento_id: dto.titular_familia_documento_id,
             titular_familia_documento_tipo: dto.titular_familia_documento_tipo,
             titular_familia_nombre: dto.titular_familia_nombre,
