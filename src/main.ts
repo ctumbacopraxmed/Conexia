@@ -13,8 +13,8 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   const config = new DocumentBuilder()
     .setTitle('Mi API')
-    .setDescription('API Data Conexia 2026-04-23')
-    .setVersion('v1.7')
+    .setDescription('API Data Conexia 2026-04-28')
+    .setVersion('v1.8')
     .addBearerAuth()
     .build();
 
