@@ -63,10 +63,10 @@ model autorizacionweb {
   fecha_pago_caja                DateTime?                @db.Date
   factura_caja                   String?                  @db.VarChar(17)
   tipoatencion                   String?                  @db.VarChar(15)
-  orden_suit                     Int?                     @unique(map: "autorizacionweb_unique")
+  orden_suit                     Int                      @default(0)
   estado                         Estado?
   bloqueopagoapp                 Int?
-  codigo_plan                    BigInt?
+  codigo_plan                    Int?
   titular_familia_documento_id   String?                  @db.VarChar(20)
   titular_familia_documento_tipo String?                  @db.VarChar(9)
   titular_familia_nombre         String?                  @db.VarChar(255)
