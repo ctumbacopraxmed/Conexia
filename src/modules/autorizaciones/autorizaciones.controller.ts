@@ -23,7 +23,7 @@ export class AutorizacionesController {
     @Get(':cedula/:estado')
     @ApiOperation({
         summary: 'Obtener autorización por Identificación',
-        description: 'Obtiene las autorizaciones APROBADAS, que aun no han sido gestionadas por Conexia.'
+        description: 'Obtiene las autorizaciones APROBADAS (Pendientes por gestionar) y PAGADAS (Historial)'
     })
     @ApiParam({
         name: 'estado',
