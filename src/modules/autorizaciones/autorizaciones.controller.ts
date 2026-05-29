@@ -1,10 +1,10 @@
-import { Controller, Get, Param, ParseIntPipe, Body, Post, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Body, Post, Query, UseGuards, DefaultValuePipe } from '@nestjs/common';
 import { AutorizacionesService } from './autorizaciones.service';
 import { CreateAutorizacionDto } from './dto/create-autorizaciones.dto';
 import { UpdateAutorizacionDto } from './dto/update-autorizaciones.dto';
 import { UpdateStatusAutorizacionDto } from './dto/updatestatus-autorizaciones.dto';
 import { FilterAutorizacionDto } from './dto/filter-autorizaciones.dto';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { responseData, responseNovo } from '../../common/filters/response.wrapper';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
@@ -44,10 +44,17 @@ export class AutorizacionesController {
     @Get()
     @ApiOperation({
         summary: 'Buscar autorizaciones',
-        description: 'Obtiene toda la información de la base de datos, tener precaucion con los rangos de fechas.'
+        description: 'Obtiene toda la información de la base de datos, tener precaución con los rangos de fechas.'
     })
-    async findAll(@Query() query: FilterAutorizacionDto) {
-        const result = await this.autorizacionesService.findAll(query);
+    async findAll(
+        @Query() query: FilterAutorizacionDto,
+    ) {
+        const result = await this.autorizacionesService.findAll(
+            query.page,
+            query.limit,
+            query,
+        );
+
         return responseData(result);
     }
     @Permissions('CREAR_REGISTROS')

@@ -16,9 +16,27 @@ export class AutorizacionesService {
         const data = await this.autorizacionesRepository.findByIdentify(identify, status);
         return data;
     }
-    async findAll(params: FilterAutorizacionDto) {
-        const data = await this.autorizacionesRepository.findAll(params);
-        return data;
+    async findAll(
+        page = 1,
+        limit = 10,
+        params: FilterAutorizacionDto,
+    ) {
+        page = Math.max(page, 1);
+        limit = Math.min(Math.max(limit, 1), 100);
+        const { data, total } = await this.autorizacionesRepository.findAll(
+            page,
+            limit,
+            params,
+        );
+        return {
+            data,
+            meta: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
     }
     async findOne(id: number) {
         const data = await this.getAutorizacionesOrThrow(id);

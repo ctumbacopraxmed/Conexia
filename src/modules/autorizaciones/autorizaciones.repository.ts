@@ -55,7 +55,11 @@ export class AutorizacionesRepository {
             { excludeExtraneousValues: true }
         );
     }
-    async findAll(params: any) {
+    async findAll(
+        page: number,
+        limit: number,
+        params: any,
+    ) {
         const where: any = {};
         if (params.id) {
             where.id = Number(params.id);
@@ -80,7 +84,7 @@ export class AutorizacionesRepository {
             const mapBloqueo = {
                 PROCESO: 1,
                 PENDIENTE: 2,
-                RECHAZADO: 3
+                RECHAZADO: 3,
             };
             where.bloqueopagoapp = mapBloqueo[params.bloqueo];
         }
@@ -90,13 +94,33 @@ export class AutorizacionesRepository {
                 where.fecha_orden.gte = new Date(params.fechaInicio);
             }
             if (params.fechaFin) {
-                where.fecha_orden.lte = new Date(params.fechaFin + 'T23:59:59.999Z');
+                where.fecha_orden.lte = new Date(
+                    params.fechaFin + 'T23:59:59.999Z'
+                );
             }
         }
-        return this.prisma.autorizacionweb.findMany({
-            where,
-            include: { autorizacionwebdetalle: true },
-        });
+        const [data, total] = await Promise.all([
+            this.prisma.autorizacionweb.findMany({
+                where,
+                include: {
+                    autorizacionwebdetalle: true,
+                },
+                skip: (page - 1) * limit,
+                take: limit,
+                orderBy: {
+                    id: 'desc',
+                },
+            }),
+
+            this.prisma.autorizacionweb.count({
+                where,
+            }),
+        ]);
+
+        return {
+            data,
+            total,
+        };
     }
     async findById(id: number) {
         return this.prisma.autorizacionweb.findUnique({

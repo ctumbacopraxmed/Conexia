@@ -74,6 +74,7 @@ model autorizacionweb {
   beneficiario_nombre            String?                  @db.VarChar(255)
   centro_medico_nombre           String?                  @db.VarChar(255)
   prestador_nombre               String?                  @db.VarChar(255)
+  numero_solicitud_suite         String?                  @default(dbgenerated("0")) @db.VarChar(255)
   autorizacionwebdetalle         autorizacionwebdetalle[]
 
   @@index([fecha_creacion], map: "idx_fecha_creacion")
@@ -140,6 +141,134 @@ model plan_prueba {
   id                      BigInt   @default(autoincrement())
 
   @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model historicos {
+  id                   BigInt?
+  oficina              String?   @db.VarChar(50)
+  cuenta               String?   @db.VarChar(100)
+  transaccion          String?   @db.VarChar(30)
+  nit                  String?   @db.VarChar(30)
+  medico               String?   @db.VarChar(255)
+  fecha_cuenta         DateTime? @db.Timestamp(6)
+  fecha_creacion       DateTime? @db.Timestamp(6)
+  fecha_contable       DateTime? @db.Timestamp(6)
+  contrato             String?   @db.VarChar(50)
+  familia              String?   @db.VarChar(50)
+  usuario              String?   @db.VarChar(50)
+  cedula_afiliado      String?   @db.VarChar(30)
+  vale_factura         String?   @db.VarChar(100)
+  tipodetalle          String?   @db.VarChar(100)
+  autorizacion         String?   @db.VarChar(100)
+  fecha_atencion       DateTime? @db.Timestamp(6)
+  cobertura_aplicada   String?   @db.VarChar(100)
+  tipo_atencion        String?   @db.VarChar(100)
+  codigo_servicio      String?   @db.VarChar(50)
+  cantidad             Decimal?  @db.Decimal(18, 2)
+  valor_presentado     Decimal?  @db.Decimal(18, 2)
+  monto_aprobado       Decimal?  @db.Decimal(18, 2)
+  deducible            Decimal?  @db.Decimal(18, 2)
+  copago               Decimal?  @db.Decimal(18, 2)
+  valores_no_cubiertos Decimal?  @db.Decimal(18, 2)
+  valor                Decimal?  @db.Decimal(18, 2)
+  diagnostico          String?   @db.VarChar(100)
+  centro_medico        String?   @db.VarChar(255)
+  tipo_cuadro          String?   @db.VarChar(100)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model plan_produccion {
+  plan                    String?
+  procedure               String?
+  daily_limit             Int?
+  has_limit               Boolean?
+  monthly_limit           Int?
+  weekly_limit            Int?
+  daily_amount_limit      Decimal? @db.Decimal
+  weekly_amount_limit     Decimal? @db.Decimal
+  yearly_limit            Int?
+  yearly_amount_limit     Decimal? @db.Decimal
+  monthly_amount_limit    Decimal? @db.Decimal
+  has_co_pay              Boolean?
+  has_refund              Boolean?
+  has_co_insurance        Boolean?
+  co_pay_amount           Decimal? @db.Decimal
+  over_limit_action_id    Int?
+  network_level_id        Int?
+  co_insurance_percentage Int?
+  is_applicable           Boolean?
+  promotion_end_date      String?
+  promotion_start_date    String?
+  exempt_deductible       Boolean?
+  technology_code         String?
+  patient_care_type_id    Int?
+  practice_type_id        Int?
+
+  @@unique([plan, procedure, network_level_id, patient_care_type_id], map: "uq_plan_produccion_key")
+  @@ignore
+}
+
+model plan_produccion_nuevo {
+  plan                    String?  @db.VarChar(255)
+  procedure               String?  @db.VarChar(255)
+  daily_limit             BigInt?
+  has_limit               Boolean?
+  monthly_limit           BigInt?
+  weekly_limit            BigInt?
+  daily_amount_limit      Float?
+  weekly_amount_limit     Float?
+  yearly_limit            BigInt?
+  yearly_amount_limit     Float?
+  monthly_amount_limit    Float?
+  has_co_pay              Boolean?
+  has_refund              Boolean?
+  has_co_insurance        Boolean?
+  co_pay_amount           Float?
+  over_limit_action_id    BigInt?
+  network_level_id        BigInt?
+  co_insurance_percentage BigInt?
+  is_applicable           Boolean?
+  promotion_end_date      String?  @db.VarChar(255)
+  promotion_start_date    String?  @db.VarChar(255)
+  exempt_deductible       Boolean?
+  technology_code         String?  @db.VarChar(255)
+  patient_care_type_id    BigInt?
+  practice_type_id        BigInt?
+  id                      BigInt   @id(map: "plan_produccion_nuevo_pk") @default(autoincrement())
+
+  @@unique([plan, procedure, network_level_id, patient_care_type_id], map: "uq_plan_produccion_nuevo_key")
+}
+
+model plan_prueba_nuevo {
+  plan                    String?  @db.VarChar(255)
+  procedure               String?  @db.VarChar(255)
+  daily_limit             BigInt?
+  has_limit               Boolean?
+  monthly_limit           BigInt?
+  weekly_limit            BigInt?
+  daily_amount_limit      Float?
+  weekly_amount_limit     Float?
+  yearly_limit            BigInt?
+  yearly_amount_limit     Float?
+  monthly_amount_limit    Float?
+  has_co_pay              Boolean?
+  has_refund              Boolean?
+  has_co_insurance        Boolean?
+  co_pay_amount           Float?
+  over_limit_action_id    BigInt?
+  network_level_id        BigInt?
+  co_insurance_percentage BigInt?
+  is_applicable           Boolean?
+  promotion_end_date      String?  @db.VarChar(255)
+  promotion_start_date    String?  @db.VarChar(255)
+  exempt_deductible       Boolean?
+  technology_code         String?  @db.VarChar(255)
+  patient_care_type_id    BigInt?
+  practice_type_id        BigInt?
+  id                      BigInt   @id(map: "plan_prueba_nuevo_pk") @default(autoincrement())
 }
 
 enum Estado {

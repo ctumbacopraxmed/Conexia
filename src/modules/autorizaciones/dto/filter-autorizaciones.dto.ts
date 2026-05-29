@@ -1,9 +1,10 @@
 import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsDateString, MaxLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsOptional, IsString, IsDateString, MaxLength, IsInt, Min } from 'class-validator';
 
 export enum Estado {
-    APROBADO = 'APROBADO',
-    PAGADO = 'PAGADO',
+  APROBADO = 'APROBADO',
+  PAGADO = 'PAGADO',
 }
 
 export enum Bloqueo {
@@ -13,6 +14,16 @@ export enum Bloqueo {
 }
 
 export class FilterAutorizacionDto {
+  @ApiProperty({ required: true })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number = 1;
+  @ApiProperty({ required: true })
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  limit?: number = 10;
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
@@ -43,12 +54,12 @@ export class FilterAutorizacionDto {
   @IsString()
   bloqueo?: Bloqueo;
 
-  @ApiProperty({required: true, example: new Date().toISOString().split('T')[0]})
+  @ApiProperty({ required: true, example: new Date().toISOString().split('T')[0] })
   @IsDateString()
   @MaxLength(10)
   fechaInicio: Date;
 
-  @ApiProperty({required: true, example: new Date().toISOString().split('T')[0]})
+  @ApiProperty({ required: true, example: new Date().toISOString().split('T')[0] })
   @IsDateString()
   @MaxLength(10)
   fechaFin: Date;
